@@ -148,5 +148,5 @@ Items you will need:
 |     Sample3|WT|
 |     Sample4|WT|
 
-Please follow the code in the attached 
+Please follow the code in the attached DESeq_2.R file. The sample isoform expression data has been included in the isoforms dir and can be used to repeat analysis and experiment with code.
 
