@@ -1,9 +1,19 @@
 # Adv_Med_Bioinformatics_Lesson
-This repo contains a lesson plan created for as an assignment for Advanced Medical Bioinformatics @ Clemson 040623
+This repo contains a lesson plan created as an assignment for Advanced Medical Bioinformatics @ Clemson 040623
 
-# Isoform expression analysis with STAR-RSEM-DESeq2 pipeline
+# Isoform expression analysis with STAR-RSEM-DESeq2 pipeline, lab overview
 
-## Outline of pipeline
+Here we are interested in myeolodysplastic syndrome cases with SF3B1 K700E mutations. SF3B1 is a core componenet of the U2 snRNP complex in the spliceosome and is involved in branch point identification and 3' splice site selection. It is known that mutation of SF3B1 results in global increases to alternative splicing. So, how can splicing factor mutations impact gene expression? 
+
+1. Alternative splicing, through the use of different splice sites, can directly result in differential expression of transcript isoforms.
+2. Alternative splicing may inactivate/activate transcription factors which regulate expression of groups of genes. 
+
+To test this hypothesis, we will utilize bulk RNA-sequencing data from patient CD34+ B cell precursors diagnosed with MDS and positive or negative for the SF3B1 K700E mutation. With this data, we will perform transcriptome mapping (STAR) and quantification (RSEM) and use DESeq2 to identify differentially expressed genes between WT and Mutant samples. 
+
+GEO link to data: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63569
+Link to data source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5029572/
+
+## Outline of pipeline, learning objectives
 
 1. fetch reads sratoolkit fastq-dump
 2. generate genome index with star
@@ -16,23 +26,9 @@ This repo contains a lesson plan created for as an assignment for Advanced Medic
 
 ### 1. here we will use fastq-dump to download our example data set from ncbi
 
+Here is one example of the fastq-dump command from the sra toolkit. The fetch_fqs.sh script contains commands for all samples in this study. 
+
 fastq-dump SRR1660308
-fastq-dump SRR1660309
-fastq-dump SRR1660310
-fastq-dump SRR1660311
-fastq-dump SRR1660312
-fastq-dump SRR1660313
-fastq-dump SRR1660314
-fastq-dump SRR1660315
-fastq-dump SRR1660316
-fastq-dump SRR1660317
-fastq-dump SRR1660318
-fastq-dump SRR1660319
-fastq-dump SRR1660320
-fastq-dump SRR1660321
-fastq-dump SRR1660322
-fastq-dump SRR1660323
-fastq-dump SRR1660324
 
 ### download ref sequences including genome sequence, annotation, and transcript sequences
 
@@ -90,10 +86,8 @@ rsem/
 -p specificies a number of threads to use [8, 16, 24, 32].
 The input order is the transcriptome bam from STAR, a path to the rsem DB, and a prefix you wish the output to have
 
-for b in *_Aligned.toTranscriptome.out.bam; do name=$(basename ${b} _Aligned.toT
-ranscriptome.out.bam)
-rsem-calculate-expression --alignments --paired-end -p 24 --no-bam-output --appe
-nd-names ${b} /data2/lackey_lab/austin/dbs/rsem/ ${name} ;
+for b in *_Aligned.toTranscriptome.out.bam; do name=$(basename ${b} _Aligned.toTranscriptome.out.bam)
+rsem-calculate-expression --alignments --paired-end -p 24 --no-bam-output --append-names ${b} /data2/lackey_lab/austin/dbs/rsem/ ${name} ;
 done
 
 ### 6. rsem will output sample.isoform.results and sample.genes.results for each sample. These contain gene abundances, gene identifiers
@@ -112,7 +106,7 @@ python ../gemprep/GEMprep/bin/normalize.py rsem_log2.txt rsem_log_quant.txt --qu
 
 Items you will need:
 1. dir with EITHER all samples .isoform.results OR .genes.results file
-2. a df for meta data and setting conditions for analysis, sample names must match that of the SAMPLE.isoform.results file
+2. a df for meta data and setting conditions for analysis, sample names must match that of the SAMPLE.isoform.results file. An example of this file is included as samp_meta.txt
 
 | Sample | Condition |
 |-----:|---------------|
