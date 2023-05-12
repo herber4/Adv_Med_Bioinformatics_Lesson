@@ -26,9 +26,10 @@ Link to data source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5029572/
 
 ### 1. here we will use fastq-dump to download our example data set from ncbi
 
-Here is one example of the fastq-dump command from the sra toolkit. The fetch_fqs.sh script contains commands for all samples in this study. 
+Here is one example of the fastq-dump command from the sra toolkit. The SRA_IDs.txt contains SRA ids for all samples in this study. 
 
 ```
+ml sra/2.11.0
 fastq-dump SRR1660308
 ```
 
